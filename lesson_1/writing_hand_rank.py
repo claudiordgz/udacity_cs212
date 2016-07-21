@@ -32,21 +32,6 @@ def poker(hands):
     "Return the best hand: poker([hand,...]) => hand"
     return max(hands, key=hand_rank)
 
-def card_ranks(hand):
-    pass
-
-def straight(ranks):
-    pass
-
-def flush(hand):
-    pass
-
-def kind(score, ranks):
-    pass
-
-def two_pair(ranks):
-    pass
-
 def hand_rank(hand):
     ranks = card_ranks(hand)
     if straight(ranks) and flush(hand):  # straight flush
