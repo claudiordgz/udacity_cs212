@@ -24,23 +24,6 @@
 # you have 4 kings and 3 queens, there are three best
 # hands: 4 kings along with any of the three queens).
 
-import itertools
-
-
-def best_wild_hand(hand):
-    "Try all values for jokers in all 5-card selections."
-
-    # Your code here
-
-
-def test_best_wild_hand():
-    assert (sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?B".split()))
-            == ['7C', '8C', '9C', 'JC', 'TC'])
-    assert (sorted(best_wild_hand("TD TC 5H 5C 7C ?R ?B".split()))
-            == ['7C', 'TC', 'TD', 'TH', 'TS'])
-    assert (sorted(best_wild_hand("JD TC TH 7C 7D 7S 7H".split()))
-            == ['7C', '7D', '7H', '7S', 'JD'])
-    return 'test_best_wild_hand passes'
 
 
 # ------------------
@@ -110,3 +93,56 @@ def two_pair(ranks):
         return (pair, lowpair)
     else:
         return None
+
+
+import itertools
+
+def get_joker(type):
+    return [e[0] + e[1] for e in itertools.product('23456789TJQKA', type)]
+
+def replace_cards(hand, type, cards):
+    if isinstance(cards, tuple):
+        l = []
+        for e in hand:
+            if e == type[0]:
+                l.append(cards[0])
+            elif e == type[1]:
+                l.append(cards[1])
+            else:
+                l.append(e)
+        return l
+    else:
+        return [r if r != type else cards for r in hand]
+
+def check_jokers(hand, type, jokers):
+    all_hands = [replace_cards(hand, type, c) for c in jokers]
+    return max([max(itertools.combinations(h, 5), key=hand_rank) for h in all_hands], key=hand_rank)
+
+def best_wild_hand(hand):
+    "Try all values for jokers in all 5-card selections."
+    black_joker, red_joker = ['?B' in hand, '?R' in hand]
+    best = None
+    if black_joker and red_joker:
+        best = check_jokers(hand, ('?B','?R'), itertools.product(get_joker('SC'), get_joker('DH')))
+    elif black_joker:
+        best = check_jokers(hand, ('?B'), get_joker('SC'))
+    elif red_joker:
+        best = check_jokers(hand, ('?R'), get_joker('DH'))
+    else:
+        best = max(itertools.combinations(hand, 5), key=hand_rank)
+    return best
+
+
+def test_best_wild_hand():
+    assert (sorted(best_wild_hand("TD TC 5H 5C 7C ?R ?B".split()))
+            == ['7C', 'TC', 'TD', 'TH', 'TS'])
+    assert (sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?R".split()))
+            == ['7C', '8C', '9C', 'JC', 'TC'])
+    assert (sorted(best_wild_hand("6C 7C 8C 9C TC 5C ?B".split()))
+            == ['7C', '8C', '9C', 'JC', 'TC'])
+    assert (sorted(best_wild_hand("JD TC TH 7C 7D 7S 7H".split()))
+            == ['7C', '7D', '7H', '7S', 'JD'])
+    return 'test_best_wild_hand passes'
+
+
+test_best_wild_hand()
