@@ -1,0 +1,23 @@
+('             ', 'TWO + TWO == FOUR')
+1.6719 sec:   None 
+('             ', 'A**2 + B**2 == C**2')
+0.0115 sec:   None 
+('             ', 'A**2 + BE**2 == BY**2')
+0.0725 sec:   None 
+('             ', 'X / X == X')
+0.0002 sec:   None 
+('             ', 'A**N + B**N == C**N and N > 1')
+0.0970 sec:   None 
+('             ', 'ATOM**0.5 == A + TO + M')
+0.0699 sec:   None 
+('             ', 'ONE < TWO < THREE')
+7.2809 sec:   None 
+('             ', 'RAMN == R**3 + RM**3 == N**3 + RX**3')
+0.5802 sec:   None 
+('             ', 'sum(range(AA)) == BB')
+0.0016 sec:   None 
+('             ', 'sum(range(POP)) == BOBO')
+0.0152 sec:   None 
+('             ', 'ODD + ODD == EVEN')
+0.3549 sec:   None 
+10.1785 tot.
