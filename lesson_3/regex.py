@@ -7,5 +7,30 @@ def search(pattern, text):
     else:
         return match('.*' + pattern, text) # fill this line
 
+
 def match(pattern, text):
-    pass
+    """
+    Return True if pattern appears at the start of text
+
+    For this quiz, please fill in the return values for:
+        1) if pattern == '':
+       	2) elif pattern == '$':
+	"""
+    if pattern == '':
+        return True
+    elif pattern == '$':
+        return text == ''
+    # you can ignore the following elif and else conditions
+    # We'll implement them in the next quiz
+    elif len(pattern) > 1 and pattern[1] in '*?':
+        p, op, pat = pattern[0], pattern[1], pattern[2:]
+        if op == '*':
+            return match_star(p, pat, text)
+        elif op == '?':
+            if match1(p, text) and match(pat, text[1:]):
+                return True
+            else:
+                return match(pat, text)
+    else:
+        return (match1(pattern[0], text) and
+                match(pattern[1],text))  # fill in this line
