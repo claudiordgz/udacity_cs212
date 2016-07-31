@@ -92,7 +92,15 @@ def dfs_paths(graph, start, goal):
                 stack.append((node, path + [node]))
 
 
-def answer(food, grid):
+def inefficient_dfs_answer(food, grid):
+    """ Uses DFS to retrieve all the paths from the top left
+        cell to the bottom right cell, then calculates the cost of
+        each path and substracts the available coins. Stops if a
+        path costs 0
+    :param food: Available food (up to 200)
+    :param grid: N x N grid up to 20 x 20
+    :return: The minimal amount of food available or -1
+    """
     ROWS, COLS = len(grid), len(grid[0])
     adj_list = build_adjacency_list(ROWS, COLS)
     final_cost = 999
@@ -105,9 +113,20 @@ def answer(food, grid):
             final_cost = cost
             if cost == 0:
                 return final_cost
-    return final_cost
+    return final_cost if final_cost != 999 else -1
 
 
+def answer(food, grid):
+    def search(f, row, column):
+        f -= grid[row][column]
+        if row < 0 or column < 0 or f < 0:
+            return food + 1
+        elif row == column == 0:
+            return f
+        else:
+            return min(search(f, row - 1, column), search(f, row, column - 1))
+    remainder = search(food, len(grid) - 1, len(grid) - 1)
+    return remainder if remainder <= food else -1
 
 
 def test():
