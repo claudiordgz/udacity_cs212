@@ -116,7 +116,21 @@ def inefficient_dfs_answer(food, grid):
     return final_cost if final_cost != 999 else -1
 
 
+import functools
+
+
+def memoize(obj):
+    cache = obj.cache = {}
+    @functools.wraps(obj)
+    def memoizer(*args, **kwargs):
+        if args not in cache:
+            cache[args] = obj(*args, **kwargs)
+        return cache[args]
+    return memoizer
+
+
 def answer(food, grid):
+    @memoize
     def search(f, row, column):
         f -= grid[row][column]
         if row < 0 or column < 0 or f < 0:
@@ -142,11 +156,11 @@ def test():
     ),(
         200,
         [[randrange(1, 6) for _ in range(N)] for _ in range(N)],
-        0
+        None
     )]
     for food, grid, r in data:
         result = answer(food, grid)
-        print(result == r)
+        print(result == r if r else result)
 
 
 test()
