@@ -56,8 +56,19 @@ Output:
 
 import math
 from random import randrange
+import functools
 
 
+def memoize(obj):
+    cache = obj.cache = {}
+
+    @functools.wraps(obj)
+    def memoizer(*args, **kwargs):
+        key = str(args) + str(kwargs)
+        if key not in cache:
+            cache[key] = obj(*args, **kwargs)
+        return cache[key]
+    return memoizer
 
 get_node = lambda x, ROWS, COLS: (int(math.floor(x/ROWS)), x % ROWS) if x != 0 else (0,0)
 
@@ -105,7 +116,6 @@ def inefficient_dfs_answer(food, grid):
     adj_list = build_adjacency_list(ROWS, COLS)
     final_cost = 999
     for path in dfs_paths(adj_list, 0, len(adj_list)-1):
-        print(path)
         matrix_path = map(lambda x: get_node(x, ROWS, COLS), path)
         path_cost = sum(map(lambda (x,y): grid[x][y], matrix_path))
         cost = food - path_cost
@@ -114,19 +124,6 @@ def inefficient_dfs_answer(food, grid):
             if cost == 0:
                 return final_cost
     return final_cost if final_cost != 999 else -1
-
-
-import functools
-
-
-def memoize(obj):
-    cache = obj.cache = {}
-    @functools.wraps(obj)
-    def memoizer(*args, **kwargs):
-        if args not in cache:
-            cache[args] = obj(*args, **kwargs)
-        return cache[args]
-    return memoizer
 
 
 def answer(food, grid):
