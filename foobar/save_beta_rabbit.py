@@ -143,6 +143,7 @@ def answer(food, grid):
 def test():
     N = 20
     data = [(
+        # First Test Case F=7, N=3, Answer=0
         7,
         [[0, 2, 5], [1, 1, 3], [2, 1, 1]],
         0
