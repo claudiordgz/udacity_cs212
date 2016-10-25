@@ -38,6 +38,17 @@ def trace(f):
     return _f
 
 
+@decorator
+def countcalls(f):
+    "Decorator that makes the function count calls to it, in callcounts[f]"
+    def _f(*args):
+        callcounts[f] += 1
+        return f(*args)
+    callcounts[_f] = 0
+    return _f
+
+callcounts = {}
+
 @trace
 def fib(n):
     if n == 0 or n == 1:
@@ -46,4 +57,5 @@ def fib(n):
         return fib(n-1) + fib(n-2)
 
 
-fib(6) #running this in the browser's IDE  will not display the indentations!
+if __name__ == '__main__':
+    fib(6) #running this in the browser's IDE  will not display the indentations!
